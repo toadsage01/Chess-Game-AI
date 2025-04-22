@@ -8,6 +8,22 @@ WIDTH, HEIGHT = 512, 512
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Simple Chess")
 
+def draw_game_state(screen, gs, images):
+    """Draw the complete game state"""
+    # Draw squares
+    colors = [pygame.Color("white"), pygame.Color("gray")]
+    for r in range(8):
+        for c in range(8):
+            color = colors[(r+c) % 2]
+            pygame.draw.rect(screen, color, pygame.Rect(c*64, r*64, 64, 64))
+    
+    # Draw pieces
+    for r in range(8):
+        for c in range(8):
+            piece = gs.board[r][c]
+            if piece != "--":
+                screen.blit(images[piece], pygame.Rect(c*64, r*64, 64, 64))
+
 def load_images():
     """Load piece images with optional flag textures"""
     pieces = ['wp', 'wR', 'wN', 'wB', 'wQ', 'wK', 'bp', 'bR', 'bN', 'bB', 'bQ', 'bK']
@@ -20,7 +36,7 @@ def load_images():
             elif piece == 'bK' and china_flag:
                 images[piece] = pygame.image.load("assets/flags/china.png")
             else:
-                images[piece] = pygame.image.load(f"assets/pieces/{piece}.png")
+                images[piece] = pygame.image.load(f"assets/pieces/{piece}.svg")
         except:
             # Fallback to simple colored pieces
             images[piece] = pygame.Surface((64, 64))
